@@ -111,9 +111,9 @@ public class ArticleController {
 		
 		// 댓글 처리 추가
 	
-		// 댓글 조회 
+		// 댓글 조회 : article_id
 		List<Comments> commentsList  =  commentsService.getComments(id);
-		
+				
 		// 조회된 댓글을 model에 추가
 		model.addAttribute("commentsList", commentsList);
 		

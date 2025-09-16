@@ -15,8 +15,16 @@ public class CommentsService {
 	private  CommentsRepository  commentsRepository;
 	
 	public List<Comments> getComments(Long id) {
-		// List<Comments>  comments = commentsRepository.find
-		return null;
+		
+		// ArticleId 로 조회
+		List<Comments>  comments = commentsRepository.findByArticleId(id);
+		
+		// Nickname 로 조회 : xml
+		//List<Comments>  comments = commentsRepository.findByNickname("Kim");
+		
+		System.out.println( comments );
+		return          comments;
+		
 	}
 	
 }
