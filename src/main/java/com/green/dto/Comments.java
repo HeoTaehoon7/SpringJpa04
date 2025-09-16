@@ -38,8 +38,7 @@ public class Comments {   // comment : ORA-00903: 테이블명이 부적합합�
 	@Column
 	private   String   nickname;
 	
-	// 외래키 설정
-	
+	// 외래키 설정	
 	@ManyToOne                      // 외래키 다대일관걔
 	@JoinColumn(name="article_id")  // 외래키 칼럼
 	private   Article   article;    // 연결될 entity 객체의 이름 
