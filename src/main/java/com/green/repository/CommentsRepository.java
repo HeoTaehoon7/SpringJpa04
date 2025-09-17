@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.green.dto.Article;
-import com.green.dto.Comments;
+import com.green.entity.Article;
+import com.green.entity.Comments;
 
 // JpaRepository : CrudRepository + PagingAndSortingRepostitory
 @Repository

@@ -1,4 +1,4 @@
-package com.green.controller;
+package com.green.api;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;

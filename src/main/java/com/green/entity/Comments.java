@@ -1,4 +1,6 @@
-package com.green.dto;
+package com.green.entity;
+
+import com.green.dto.CommentsDto;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,7 +34,7 @@ public class Comments {   // comment : ORA-00903: 테이블명이 부적합합�
 	// @Column(name="nick_name", nullable=true, length=255)
 	// Oracle 11g varchar2 최대 4000, -> CLOB
 	// Oracle 12c varchar2 최대 32000  -> 별도설정 필요,   
-	@Column
+	@Column(length=255)
 	private   String   body;
 	
 	@Column
@@ -43,7 +45,28 @@ public class Comments {   // comment : ORA-00903: 테이블명이 부적합합�
 	@JoinColumn(name="article_id")  // 외래키 칼럼
 	private   Article   article;    // 연결될 entity 객체의 이름 
 	
+	public static  Comments   createComment( CommentsDto  dto, Article article ) {
+		return  new  Comments(
+			null,        
+			dto.getBody(),
+			dto.getNickname(),
+			article
+		);
+	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

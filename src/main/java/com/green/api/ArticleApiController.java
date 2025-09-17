@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.green.dto.Article;
 import com.green.dto.ArticleDto;
+import com.green.entity.Article;
 import com.green.repository.ArticleRepository;
 import com.green.service.ArticleService;
 

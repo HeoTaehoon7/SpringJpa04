@@ -1,10 +1,14 @@
 package com.green.dto;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.green.entity.Comments;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Data
 @NoArgsConstructor
