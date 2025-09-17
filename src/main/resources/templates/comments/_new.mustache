@@ -36,10 +36,18 @@
    // 버튼 찾기
    
    const  newCreateBtnEl  =  document.querySelector('#new-create-btn')
+   const  nicknameEl      = document.querySelector('#new-comments-nickname') 
+   const  bodyEl          = document.querySelector('#new-comments-body') 
    newCreateBtnEl.addEventListener('click' , () => {
-	   let    url        = '/api/articles/{{id}}/comments'
-	   const  nicknameEl = document.querySelector('#new-comments-nickname') 
-	   const  bodyEl     = document.querySelector('#new-comments-body') 
+	   if( nicknameEl.value.trim() == '' ) {
+		   alert('닉네임이 없습니다')
+		   return 
+	   }
+	   if( bodyEl.value.trim() == '' ) {
+		   alert('댓글 내용이 없습니다')
+		   return 
+	   }
+	   let    url         = '/api/articles/{{id}}/comments'	   
 	   const  comment = {
 		   nickname    :  nicknameEl.value,        // 닉네임
 		   body        :  bodyEl.value,    // 댓글 본문

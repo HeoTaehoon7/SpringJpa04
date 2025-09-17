@@ -5,19 +5,26 @@
 	  <div class="card-header">
 	    {{ nickname  }}
 	    &nbsp;&nbsp;&nbsp;&nbsp;
-	    <button type="button" 
+	    <button 	            
+	            type="button" 
 	            class="btn btn-sm btn-outline-primary" 
 	            data-bs-toggle="modal" 
-	            data-bs-target="#exampleModal" 
-	            data-bs-whatever="@mdo">
+	            data-bs-target="#updateModal" 
+	            
+	            data-bs-id="{{id}}"
+	            data-bs-nickname="{{nickname}}"
+	            data-bs-body="{{body}}"
+	            data-bs-article-id="{{article.id}}"	            
+	            >
 	    수정
 	    </button>
 
 	    <!-- 삭제 -->
-		<button type="button" 
-		  class="btn btn-sm btn-outline-danger" 
-		  data-bs-toggle="modal" 
-		  data-bs-target="#deleteModal">
+		<button  
+		     type="button" 
+		     class="btn btn-sm btn-outline-danger" 
+		     data-bs-toggle="modal" 
+		     data-bs-target="#deleteModal">
   		삭제
 		</button>
 	  </div>
@@ -31,28 +38,34 @@
 
 
 <!-- 모달 : 수정 -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="updateModal" tabindex="-1" 
+   aria-labelledby="updateModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">댓글 수정</h5>
+        <h5 class="modal-title" id="updateModalLabel">댓글 수정</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form>
+          <input type="hidden"  id="update-id" />
+          <input type="hidden"  id="update-article-id" />
           <div class="mb-3">
             <label for="recipient-name" class="col-form-label">Nickname</label>
-            <input type="text" class="form-control" id="nickname">
+            <input type="text" class="form-control" id="update-nickname">
           </div>
           <div class="mb-3">
             <label for="message-text" class="col-form-label">댓글내용:</label>
-            <textarea class="form-control" id="body"></textarea>
+            <textarea class="form-control" id="update-body"></textarea>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">수정</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+        <button type="button" class="btn btn-primary"    
+             id="comment-update-btn">수정</button>
+        <button type="button" class="btn btn-secondary"  
+             id="comment-delete-btn" 
+              data-bs-dismiss="modal">취소</button>
       </div>
     </div>
   </div>
@@ -81,10 +94,73 @@
   </div>
 </div>
 
+<!-- script 영역 -->
+<!-- 모달 이벤트 처리 : 다이어로그가 화면에 나타날때 해야햘 일 
+   수정버튼 클릭시 모달창에 값을 넘기고 수정데이터 입력받아
+    저장버튼누르면 db 에 값을 수정
+ -->
+<script>
+  //  모달창을 찾는다 
+  const   updateModalEl = document.querySelector('#updateModal')
+ 
+  //  이벤트 연결 : 부트스트랩의 자체 이벤트
+  // show.bs.modal    - modal 창이 화면에 그려지기 전애
+  // shown.bs.modal   - modal 이 열리고  화면에 표시된 후
+  // hide.bs.modal    - modal 이 닫히기 직전
+  // hidden.bs.modal  - modal 이 닫힌 후  완전히 사라진 시점
+    
+  // 이벤트 연결 : show.bs.modal - modal 화면이 그려지기전
+  updateModalEl.addEventListener('show.bs.modal', (e) => {
+      console.log( e )
+      // 1. 눌러진 수정 버튼 정보
+      const  btn        =  e.relatedTarget;
+      let    id         =  btn.dataset.bsId           // data-bs-id
+      let    nickname   =  btn.dataset.bsNickname     // data-bs-nickname
+      let    body       =  btn.dataset.bsBody         // data-bs-body
+      let    articleId  =  btn.dataset.bsArticleId    // data-bs-article-id
+
+      // 3. modal 창에 출력
+      document.querySelector('#update-article-id').value = articleId
+      document.querySelector('#update-id').value         = id
+      document.querySelector('#update-nickname').value   = nickname
+      document.querySelector('#update-body').value       = body
+  	  
+  } )
+
+</script>
+
+<script>
+   // modal 차의 수정버튼 클릭 - comment-update-btn
+   const  commentUpdateBtnEl  = document.querySelector('#comment-update-btn')
+   commentUpdateBtnEl.addEventListener('click', () => {
+	   let  comment  = {
+			id          : document.querySelector('#update-id').value;  
+			articleId   : document.querySelector('#update-article-id').value;  
+			nickname    : document.querySelector('#update-nickname').value;  
+			body        : document.querySelector('#update-body').value;  
+	   }
+	   let  url      = '/api/comments/' + comment.id;
+	   let  params   = {
+			method    : 'PATCH',
+			headers   : {"Content-Type" : "application/json;charset=UTF-8"},
+			body      : JSON.stringify( comment )
+	   }
+	   fetch(url, params)
+	     .then(response => {
+	    	 console.log(resppnse)
+	    	 let msg = if(response.ok) 
+	    		? "댓글이 수정되었습니다"
+	    	    : "댓글 수정 실패 ...!!!!"
+	    	 alert(msg)
+	    	 window.location.reload()
+	     })
+	   
+   } )
+   
+   // modal 차의 삭재버튼 클릭 - comment-delete-btn
 
 
-
-
+</script>
 
 
 

@@ -113,7 +113,7 @@ public class ArticleController {
 	
 		// 댓글 조회 : article_id
 		List<Comments> commentsList  =  commentsService.getComments(id);
-				
+		log.debug("commentsList: {}", commentsList);		
 		// 조회된 댓글을 model에 추가
 		model.addAttribute("commentsList", commentsList);
 		
