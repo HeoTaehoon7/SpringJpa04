@@ -54,8 +54,47 @@ public class CommentsService {
 		CommentsDto  newDto   =  CommentsDto.createCommentDto( created );     
 		return       newDto;
 	}
+
+	// 수정
+	public CommentsDto update(Long id, CommentsDto dto) {
+		
+		// 1. 수정을 위한 댓글 조회		
+		Comments  target  =  commentsRepository.findById(id)
+			 .orElseThrow( () -> new IllegalArgumentException(
+				 "댓글 수정 실패! 수정할 댓글이 없습니다"));
+		
+		// 2. target 의 내용중 수정할 낸용을 변경
+		// target : 수정될 댓글
+		// dto    : 수정할 입력받은 데이터
+		target.patch( dto );  
+		
+		// 3. 수정
+		Comments     updated      =   commentsRepository.save( target );
+		
+		CommentsDto  commentsDto  =   CommentsDto.createCommentDto( updated );
+		return       commentsDto;
+	}
+
+	public CommentsDto delete(CommentsDto dto) {
+		
+		Long   id   =  dto.getId();
+		
+		// 1. 삭제을 위한 댓글 조회		
+		Comments  target  =  commentsRepository.findById(id)
+			 .orElseThrow( () -> new IllegalArgumentException(
+				 "댓글 삭제 실패! 삭제할 댓글이 없습니다"));
+		
+		// 2.
+		commentsRepository.deleteById(id);
+		
+		CommentsDto  result = CommentsDto.createCommentDto(target);
+		
+		return       result;
+	}
 	
 }
+
+
 
 
 

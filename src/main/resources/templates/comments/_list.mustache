@@ -24,7 +24,13 @@
 		     type="button" 
 		     class="btn btn-sm btn-outline-danger" 
 		     data-bs-toggle="modal" 
-		     data-bs-target="#deleteModal">
+		     data-bs-target="#deleteModal"
+		     		     
+	         data-bs-id="{{id}}"
+             data-bs-nickname="{{nickname}}"
+             data-bs-body="{{body}}"
+             data-bs-article-id="{{article.id}}"	     
+		     >
   		삭제
 		</button>
 	  </div>
@@ -43,7 +49,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="updateModalLabel">댓글 수정</h5>
+        <h5 class="modal-title" id="updateModalLabel">댓글 수정 </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
@@ -73,21 +79,21 @@
 
 <!-- 모달 : 삭제 -->
 <div class="modal fade" id="deleteModal" tabindex="-1" 
-   aria-labelledby="exampleModalLabel" aria-hidden="true">
+   aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">삭제 확인</h5>
+        <h5 class="modal-title" id="deleteModalLabel">삭제 확인</h5>
         <button type="button" 
                 class="btn-close" 
                 data-bs-dismiss="modal" 
                 aria-label="Close"></button>
       </div>
       <div class="modal-body">
-         를  삭제하시겠습니까?
+        <span id="id"></span> 를  삭제하시겠습니까?
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Yes</button>
+        <button type="button" class="btn btn-primary"  id="deleteYes" >Yes</button>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
       </div>
     </div>
@@ -100,6 +106,7 @@
     저장버튼누르면 db 에 값을 수정
  -->
 <script>
+  //  수정버튼을 클릭했을 때  -> 모달창이 열린다 (show.bs.modal 이밴트 발생)
   //  모달창을 찾는다 
   const   updateModalEl = document.querySelector('#updateModal')
  
@@ -130,14 +137,14 @@
 </script>
 
 <script>
-   // modal 차의 수정버튼 클릭 - comment-update-btn
+   // modal 항의 수정버튼 클릭 - comment-update-btn
    const  commentUpdateBtnEl  = document.querySelector('#comment-update-btn')
    commentUpdateBtnEl.addEventListener('click', () => {
 	   let  comment  = {
-			id          : document.querySelector('#update-id').value;  
-			articleId   : document.querySelector('#update-article-id').value;  
-			nickname    : document.querySelector('#update-nickname').value;  
-			body        : document.querySelector('#update-body').value;  
+			id          : document.querySelector('#update-id').value,  
+			articleId   : document.querySelector('#update-article-id').value,  
+			nickname    : document.querySelector('#update-nickname').value,  
+			body        : document.querySelector('#update-body').value  
 	   }
 	   let  url      = '/api/comments/' + comment.id;
 	   let  params   = {
@@ -147,8 +154,8 @@
 	   }
 	   fetch(url, params)
 	     .then(response => {
-	    	 console.log(resppnse)
-	    	 let msg = if(response.ok) 
+	    	 console.log(response)
+	    	 let msg = (response.ok) 
 	    		? "댓글이 수정되었습니다"
 	    	    : "댓글 수정 실패 ...!!!!"
 	    	 alert(msg)
@@ -157,10 +164,55 @@
 	   
    } )
    
-   // modal 차의 삭재버튼 클릭 - comment-delete-btn
+   // modal 차의 삭제버튼 클릭 - comment-delete-btn
+   //  삭제버튼을 클릭했을 때  -> 모달창이 열린다 (show.bs.modal 이밴트 발생)
+   //  모달창을 찾는다 
+  const   deleteModalEl = document.querySelector('#deleteModal')
+  deleteModalEl.addEventListener('show.bs.modal', (e) => {
+	  console.log(e);
+	  // 클릭한 삭제버튼을 찾는다
+	  const  btn  =  e.relatedTarget
+	  
+	  // 삭제버튼의 data-bs-id 를 가져온다
+	  let    id          =  btn.dataset.bsId;
+	  let    articleId   =  btn.dataset.bsArticleId;
+	  let    nickname    =  btn.dataset.bsNickname;
+	  let    body        =  btn.dataset.bsBody;
+	 
+	  // <span id="id"></span> 에 넣어준다
+	  const spanIdEl = deleteModalEl.querySelector('#id')
+	  // console.dir(spanIdEl)
+	  spanIdEl.innerHTML  = `${nickname} : ${id} 의 댓글`;
+	  spanIdEl.dataset.id = id;     // data-id="8" 속성추가 
+  })
+  
+  <!-- 댓글 삭제 버튼 클릭 -->
+  const  deleteYesEl  =  document.querySelector('#deleteYes')  
+  deleteYesEl.addEventListener('click', (e) => {
+	  let  comment = {
+		   id     :  document.querySelector('#id').dataset.id 	  
+	  }
+	  let  url    = '/api/article'
+	  let  params  = {
+		   method  : 'DELETE',
+		   headers : {"Content-Type":"application/json;charset=utf-8"},
+		   body    :  JSON.stringify( comment  )
+	  }
+	  console.log(params)
+	  fetch(url, params)
+	     .then(response => {
+	    	 console.log(response)
+	    	 let msg = (response.ok) 
+	    		? "댓글이 삭제되었습니다"
+	    	    : "댓글 삭제 실패 ...!!!!"
+	    	 alert(msg)
+	    	 window.location.reload()
+      })
 
+  })
 
 </script>
+
 
 
 

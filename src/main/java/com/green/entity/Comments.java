@@ -53,6 +53,19 @@ public class Comments {   // comment : ORA-00903: 테이블명이 부적합합�
 			article
 		);
 	}
+
+	//  target   <-  dto
+	public void patch(CommentsDto dto) {
+		if( this.id != dto.getId()  ) {
+			throw new IllegalArgumentException(
+					"댓글 수정 실패! 잘못된 아이디가 입력되었습니다");
+		}
+		if( dto.getNickname() != null )			
+			this.nickname =  dto.getNickname();
+		if( dto.getBody() != null )
+			this.body     =  dto.getBody(); 
+		
+	}
 	
 }
 
